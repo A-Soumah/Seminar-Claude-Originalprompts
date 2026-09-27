@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giorgio Armani – Acqua di Giò Profondo</title>
+  <style>
+    :root{
+      --color-text: #1a1a1a;
+      --color-text-muted: #6b6b6b;
+      --color-border: #e0e0e0;
+      --color-border-strong: #111111;
+      --color-accent: #d81159;
+      --color-accent-dark: #b5104c;
+      --color-success: #4caf50;
+      --color-badge-bg: #f1e9f8;
+      --color-badge-text: #6a3f9c;
+      --color-cream: #f8f4ec;
+      --font-main: "Helvetica Neue", Helvetica, Arial, "Segoe UI", sans-serif;
+      --max-width: 1280px;
+    }
+
+    *{
+      box-sizing: border-box;
+    }
+
+    body{
+      margin: 0;
+      font-family: var(--font-main);
+      color: var(--color-text);
+      background: #ffffff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .product-page{
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: grid;
+      grid-template-columns: minmax(280px, 610px) 1fr;
+      gap: 48px;
+    }
+
+    @media (max-width: 860px){
+      .product-page{
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- Gallery ---------- */
+
+    .gallery{
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .main-image-wrap{
+      position: relative;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      background: #fafafa;
+    }
+
+    .main-image{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .nav-arrow{
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      font-size: 20px;
+      color: var(--color-text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-arrow:hover{
+      background: #ffffff;
+    }
+
+    .thumbnails{
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .thumb{
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 4px;
+      background: #fff;
+    }
+
+    .thumb.active{
+      border: 2px solid var(--color-border-strong);
+      padding: 3px;
+    }
+
+    .thumb:hover{
+      border-color: #9a9a9a;
+    }
+
+    /* ---------- Details column ---------- */
+
+    .details{
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-title{
+      font-size: 30px;
+      line-height: 1.2;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    .product-type{
+      font-size: 16px;
+      color: var(--color-text-muted);
+      margin: 0 0 20px;
+    }
+
+    .price-block{
+      margin-bottom: 24px;
+    }
+
+    .price{
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .price-meta{
+      font-size: 14px;
+      color: var(--color-text-muted);
+      margin-top: 6px;
+    }
+
+    .price-uvp{
+      font-size: 15px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    .price-uvp .uvp-value{
+      text-decoration: line-through;
+    }
+
+    .savings{
+      color: var(--color-accent);
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    /* ---------- Size selection ---------- */
+
+    .size-section{
+      margin-bottom: 24px;
+    }
+
+    .size-label{
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .size-options{
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .size-option{
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+
+    .size-option:hover{
+      border-color: #b3b3b3;
+    }
+
+    .size-option.selected{
+      border: 2px solid var(--color-border-strong);
+      padding: 17px 19px;
+    }
+
+    .size-option input[type="radio"]{
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-visual{
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid #9a9a9a;
+      flex-shrink: 0;
+      margin-right: 18px;
+      position: relative;
+    }
+
+    .size-option.selected .radio-visual{
+      border: 6px solid var(--color-border-strong);
+    }
+
+    .size-option-main{
+      display: flex;
+      align-items: center;
+    }
+
+    .size-option-info{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .size-name{
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .size-price{
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .stock-status{
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+
+    .stock-dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-success);
+      flex-shrink: 0;
+    }
+
+    .best-price-badge{
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      background: var(--color-badge-bg);
+      color: var(--color-badge-text);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* ---------- Actions ---------- */
+
+    .actions{
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .wishlist-btn{
+      width: 64px;
+      height: 60px;
+      flex-shrink: 0;
+      border: 1px solid var(--color-border-strong);
+      border-radius: 4px;
+      background: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+    }
+
+    .wishlist-btn:hover{
+      background: #f5f5f5;
+    }
+
+    .add-to-cart{
+      flex: 1;
+      height: 60px;
+      background: #111111;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .add-to-cart:hover{
+      background: #000000;
+    }
+
+    .add-to-cart svg{
+      width: 18px;
+      height: 18px;
+    }
+
+    /* ---------- Info rows ---------- */
+
+    .info-rows{
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .info-row{
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14.5px;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+
+    .info-row .icon{
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: var(--color-text);
+    }
+
+    .info-row b{
+      font-weight: 700;
+    }
+
+    .samples-box{
+      background: var(--color-cream);
+      border-radius: 4px;
+      padding: 16px 18px;
+      font-size: 14.5px;
+      color: var(--color-text);
+      margin-bottom: 28px;
+    }
+
+    /* ---------- Accordion ---------- */
+
+    .accordion{
+      border-top: 1px solid var(--color-border);
+    }
+
+    .accordion-item{
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .accordion-header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 2px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .chevron{
+      font-size: 14px;
+      color: var(--color-text);
+      transition: transform 0.2s ease;
+    }
+
+    .accordion-item:not(.open) .accordion-content{
+      display: none;
+    }
+
+    .accordion-item.open .chevron{
+      transform: rotate(180deg);
+    }
+
+    .accordion-content{
+      padding: 0 2px 22px;
+    }
+
+    .highlight-row{
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15.5px;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .highlight-row:last-child{
+      margin-bottom: 0;
+    }
+
+    .highlight-row .icon{
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .highlight-row b{
+      font-weight: 700;
+    }
+
+    /* ---------- Legal link ---------- */
+
+    .legal-link{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      font-size: 13.5px;
+      color: var(--color-text-muted);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .legal-link svg{
+      width: 14px;
+      height: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="product-page">
+
+  <!-- ============ GALLERY ============ -->
+  <section class="gallery">
+    <div class="main-image-wrap">
+      <img class="main-image" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect width='600' height='600' fill='%23fafafa'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='20' fill='%23bbbbbb' text-anchor='middle' dominant-baseline='middle'%3EProduktbild%3C/text%3E%3C/svg%3E" alt="Giorgio Armani Acqua di Giò Profondo Parfum, 50 ml">
+      <button class="nav-arrow" aria-label="Nächstes Bild">›</button>
+    </div>
+
+    <div class="thumbnails">
+      <img class="thumb active" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fafafa'/%3E%3C/svg%3E" alt="Thumbnail 1">
+      <img class="thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fafafa'/%3E%3C/svg%3E" alt="Thumbnail 2">
+      <img class="thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fafafa'/%3E%3C/svg%3E" alt="Thumbnail 3">
+      <img class="thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fafafa'/%3E%3C/svg%3E" alt="Thumbnail 4">
+      <img class="thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fafafa'/%3E%3C/svg%3E" alt="Thumbnail 5">
+      <img class="thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fafafa'/%3E%3C/svg%3E" alt="Thumbnail 6">
+      <img class="thumb" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23fafafa'/%3E%3C/svg%3E" alt="Thumbnail 7">
+    </div>
+  </section>
+
+  <!-- ============ DETAILS ============ -->
+  <section class="details">
+
+    <h1 class="product-title">Giorgio Armani<br>Acqua di Giò Profondo</h1>
+    <p class="product-type">Parfum</p>
+
+    <div class="price-block">
+      <div class="price">68,95&nbsp;€</div>
+      <div class="price-meta">50&nbsp;ml (1.379,00&nbsp;€ / 1&nbsp;l, inkl. MwSt.)</div>
+      <div class="price-uvp">UVP <span class="uvp-value">117,00&nbsp;€</span> <span class="savings">(Du sparst 48,05&nbsp;€)</span></div>
+    </div>
+
+    <div class="size-section">
+      <div class="size-label">Größe wählen (4)&nbsp;:</div>
+
+      <div class="size-options" role="radiogroup" aria-label="Größe wählen">
+
+        <label class="size-option">
+          <input type="radio" name="size" value="30ml">
+          <div class="size-option-main">
+            <span class="radio-visual"></span>
+            <div class="size-option-info">
+              <span class="size-name">30&nbsp;ml</span>
+              <span class="size-price">58,68&nbsp;€</span>
+            </div>
+          </div>
+          <span class="stock-status"><span class="stock-dot"></span>Auf Lager</span>
+        </label>
+
+        <label class="size-option selected">
+          <input type="radio" name="size" value="50ml" checked>
+          <div class="size-option-main">
+            <span class="radio-visual"></span>
+            <div class="size-option-info">
+              <span class="size-name">50&nbsp;ml</span>
+              <span class="size-price">68,95&nbsp;€</span>
+            </div>
+          </div>
+          <span class="stock-status"><span class="stock-dot"></span>Auf Lager</span>
+        </label>
+
+        <label class="size-option">
+          <input type="radio" name="size" value="100ml">
+          <div class="size-option-main">
+            <span class="radio-visual"></span>
+            <div class="size-option-info">
+              <span class="size-name">100&nbsp;ml</span>
+              <span class="size-price">82,30&nbsp;€</span>
+            </div>
+          </div>
+          <span class="stock-status"><span class="stock-dot"></span>Auf Lager</span>
+        </label>
+
+        <label class="size-option">
+          <span class="best-price-badge">Bester Preis pro ml</span>
+          <input type="radio" name="size" value="200ml">
+          <div class="size-option-main">
+            <span class="radio-visual"></span>
+            <div class="size-option-info">
+              <span class="size-name">200&nbsp;ml</span>
+              <span class="size-price">129,00&nbsp;€</span>
+            </div>
+          </div>
+          <span class="stock-status"><span class="stock-dot"></span>Auf Lager</span>
+        </label>
+
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="wishlist-btn" aria-label="Zur Wunschliste hinzufügen">♡</button>
+      <button class="add-to-cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        In den Warenkorb
+      </button>
+    </div>
+
+    <div class="info-rows">
+      <div class="info-row">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg>
+        <span>Vsl. Lieferung: <b>28. August bis 29. August</b></span>
+      </div>
+      <div class="info-row">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="6" width="14" height="11" rx="1"/><path d="M15 10h4l3 3v4h-7z"/><circle cx="6" cy="19" r="1.6"/><circle cx="17.5" cy="19" r="1.6"/></svg>
+        <span>Kostenloser Versand: <b>Versandkostenfrei</b></span>
+      </div>
+      <div class="info-row">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        <span>Kostenloser Rückversand: <b>120 Tage Rückgaberecht</b></span>
+      </div>
+      <div class="info-row">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 12a3 3 0 1 0 0-.01"/></svg>
+        <span>Zahlarten: <b>Rechnungskauf, Klarna, PayPal, Kreditkarte, Apple&nbsp;Pay, Google&nbsp;Pay</b></span>
+      </div>
+    </div>
+
+    <div class="samples-box">
+      Bis zu 2 GRATISPROBEN zu jedem Paket
+    </div>
+
+    <div class="accordion">
+
+      <div class="accordion-item open">
+        <div class="accordion-header">
+          Highlights
+          <span class="chevron">⌃</span>
+        </div>
+        <div class="accordion-content">
+          <div class="highlight-row"><span class="icon">🌿</span><span><b>Duftrichtung:</b> frisch</span></div>
+          <div class="highlight-row"><span class="icon">🍃</span><span><b>Charakter:</b> sinnlich, belebend, maskulin</span></div>
+          <div class="highlight-row"><span class="icon">🌸</span><span><b>Kopfnoten:</b> Zitrus, Bergamotte</span></div>
+          <div class="highlight-row"><span class="icon">🌸</span><span><b>Herznoten:</b> Muskatellersalbei, Rosmarin</span></div>
+          <div class="highlight-row"><span class="icon">🌸</span><span><b>Basisnoten:</b> Vetiver, Patchouli</span></div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Produktdetails
+          <span class="chevron">⌄</span>
+        </div>
+        <div class="accordion-content"></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Inhaltsstoffe
+          <span class="chevron">⌄</span>
+        </div>
+        <div class="accordion-content"></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Anwendung
+          <span class="chevron">⌄</span>
+        </div>
+        <div class="accordion-content"></div>
+      </div>
+
+      <div class="accordion-item">
+        <div class="accordion-header">
+          Hersteller und Sicherheit
+          <span class="chevron">⌄</span>
+        </div>
+        <div class="accordion-content"></div>
+      </div>
+
+    </div>
+
+    <a class="legal-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 3v18"/><path d="M4 4h13l-2 4 2 4H4"/></svg>
+      Rechtliche Bedenken melden
+    </a>
+
+  </section>
+
+</div>
+
+<script>
+  // Size selection
+  document.querySelectorAll('.size-option').forEach(function(option){
+    option.addEventListener('click', function(){
+      document.querySelectorAll('.size-option').forEach(function(o){ o.classList.remove('selected'); });
+      option.classList.add('selected');
+      option.querySelector('input[type="radio"]').checked = true;
+    });
+  });
+
+  // Thumbnail selection
+  document.querySelectorAll('.thumb').forEach(function(thumb){
+    thumb.addEventListener('click', function(){
+      document.querySelectorAll('.thumb').forEach(function(t){ t.classList.remove('active'); });
+      thumb.classList.add('active');
+    });
+  });
+
+  // Accordion toggle
+  document.querySelectorAll('.accordion-header').forEach(function(header){
+    header.addEventListener('click', function(){
+      var item = header.closest('.accordion-item');
+      item.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>

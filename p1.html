@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giorgio Armani – Acqua di Giò Profondo</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #1a1a1a;
+    background: #ffffff;
+    padding: 40px 20px;
+  }
+
+  .product-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 60px;
+  }
+
+  /* ---------- Gallery (left column) ---------- */
+
+  .gallery {
+    position: relative;
+  }
+
+  .main-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+  }
+
+  .main-image {
+    width: 190px;
+    height: 340px;
+    background: linear-gradient(180deg, #0d1b3a 0%, #16326b 45%, #3a6ea8 75%, #f4f2ea 100%);
+    border-radius: 4px 4px 2px 2px;
+    position: relative;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  }
+
+  .main-image::before {
+    /* cap */
+    content: "";
+    position: absolute;
+    top: -46px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 66px;
+    height: 50px;
+    background: #16264d;
+    border-radius: 3px;
+  }
+
+  .main-image::after {
+    content: "ACQUA\A DI\A GIO";
+    white-space: pre;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ffffff;
+    font-size: 15px;
+    letter-spacing: 2px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .main-image .label {
+    position: absolute;
+    bottom: 34px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #16264d;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .gallery-arrow {
+    position: absolute;
+    top: 50%;
+    right: -10px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #1a1a1a;
+  }
+
+  .thumbnails {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .thumbnail {
+    width: 74px;
+    height: 74px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #fafafa;
+    overflow: hidden;
+  }
+
+  .thumbnail.active {
+    border-bottom: 2px solid #1a1a1a;
+  }
+
+  .thumbnail .mini-bottle {
+    width: 20px;
+    height: 34px;
+    background: linear-gradient(180deg, #0d1b3a 0%, #3a6ea8 100%);
+    border-radius: 2px;
+  }
+
+  .thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Info (right column) ---------- */
+
+  .product-info h1 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .product-info h1 .product-line {
+    display: block;
+  }
+
+  .product-type {
+    color: #6b6b6b;
+    font-size: 15px;
+    margin-top: 8px;
+  }
+
+  .price-block {
+    margin-top: 18px;
+  }
+
+  .price-current {
+    font-size: 26px;
+    font-weight: 700;
+    color: #d70b6e;
+  }
+
+  .price-per-unit {
+    color: #6b6b6b;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .price-uvp {
+    font-size: 13px;
+    color: #1a1a1a;
+    margin-top: 4px;
+  }
+
+  .price-uvp .savings {
+    color: #d70b6e;
+    font-weight: 700;
+  }
+
+  /* ---------- Size selector ---------- */
+
+  .size-select {
+    margin-top: 28px;
+  }
+
+  .size-select > .size-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .size-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .size-option {
+    position: relative;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .size-option.selected {
+    border: 2px solid #1a1a1a;
+    padding: 13px 17px;
+  }
+
+  .size-option .badge {
+    position: absolute;
+    top: -11px;
+    left: 16px;
+    background: #ece3f5;
+    color: #5a3d8a;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+
+  .size-option .radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #8c8c8c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 14px;
+    flex-shrink: 0;
+  }
+
+  .size-option.selected .radio {
+    border-color: #1a1a1a;
+  }
+
+  .size-option.selected .radio::after {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #1a1a1a;
+  }
+
+  .size-option .size-left {
+    display: flex;
+    align-items: center;
+  }
+
+  .size-option .size-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .size-option .size-label {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
+
+  .size-option .size-price {
+    font-size: 17px;
+    font-weight: 700;
+    color: #d70b6e;
+  }
+
+  .size-option .stock {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #1a1a1a;
+    white-space: nowrap;
+  }
+
+  .stock-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4c9a2a;
+    display: inline-block;
+  }
+
+  /* ---------- Actions ---------- */
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .wishlist-btn {
+    width: 56px;
+    height: 52px;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+
+  .add-to-cart-btn {
+    flex: 1;
+    background: #1a1a1a;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  /* ---------- Info list (delivery, shipping, etc.) ---------- */
+
+  .info-list {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .info-row .icon {
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  /* ---------- Samples banner ---------- */
+
+  .samples-banner {
+    margin-top: 20px;
+    background: #f7f3ec;
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ---------- Highlights ---------- */
+
+  .highlights {
+    margin-top: 32px;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    cursor: pointer;
+  }
+
+  .section-header h3 {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .chevron {
+    font-size: 14px;
+    color: #1a1a1a;
+    transition: transform 0.2s ease;
+  }
+
+  .highlight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 20px;
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .highlight-item .icon {
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  /* ---------- Accordion sections ---------- */
+
+  .accordion-section {
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .accordion-section:last-of-type {
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .legal-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 0;
+    font-size: 14px;
+    text-decoration: underline;
+    color: #1a1a1a;
+    cursor: pointer;
+  }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width: 720px) {
+    .product-page {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="product-page">
+
+  <!-- ============ LEFT: Image Gallery ============ -->
+  <div class="gallery">
+    <div class="main-image-wrapper">
+      <div class="main-image">
+        <span class="label">PARFUM</span>
+      </div>
+      <div class="gallery-arrow">&#8250;</div>
+    </div>
+
+    <div class="thumbnails">
+      <div class="thumbnail active"><div class="mini-bottle"></div></div>
+      <div class="thumbnail"><div class="mini-bottle"></div></div>
+      <div class="thumbnail"><div class="mini-bottle"></div></div>
+      <div class="thumbnail"><div class="mini-bottle"></div></div>
+      <div class="thumbnail"><div class="mini-bottle"></div></div>
+      <div class="thumbnail"><div class="mini-bottle"></div></div>
+      <div class="thumbnail"><div class="mini-bottle"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT: Product Info ============ -->
+  <div class="product-info">
+
+    <h1>
+      <span class="product-line">Giorgio Armani</span>
+      <span class="product-line">Acqua di Giò Profondo</span>
+    </h1>
+    <div class="product-type">Parfum</div>
+
+    <div class="price-block">
+      <div class="price-current">68,95&nbsp;€</div>
+      <div class="price-per-unit">50&nbsp;ml (1.379,00&nbsp;€&nbsp;/&nbsp;1&nbsp;l, inkl.&nbsp;MwSt.)</div>
+      <div class="price-uvp">UVP 117,00&nbsp;€ <span class="savings">(Du sparst 48,05&nbsp;€)</span></div>
+    </div>
+
+    <div class="size-select">
+      <div class="size-title">Größe wählen (4)&nbsp;:</div>
+
+      <div class="size-options">
+
+        <div class="size-option">
+          <div class="size-left">
+            <span class="radio"></span>
+            <div class="size-text">
+              <span class="size-label">30 ml</span>
+              <span class="size-price">58,68&nbsp;€</span>
+            </div>
+          </div>
+          <div class="stock"><span class="stock-dot"></span>Auf Lager</div>
+        </div>
+
+        <div class="size-option selected">
+          <div class="size-left">
+            <span class="radio"></span>
+            <div class="size-text">
+              <span class="size-label">50 ml</span>
+              <span class="size-price">68,95&nbsp;€</span>
+            </div>
+          </div>
+          <div class="stock"><span class="stock-dot"></span>Auf Lager</div>
+        </div>
+
+        <div class="size-option">
+          <div class="size-left">
+            <span class="radio"></span>
+            <div class="size-text">
+              <span class="size-label">100 ml</span>
+              <span class="size-price">82,30&nbsp;€</span>
+            </div>
+          </div>
+          <div class="stock"><span class="stock-dot"></span>Auf Lager</div>
+        </div>
+
+        <div class="size-option">
+          <span class="badge">Bester Preis pro ml</span>
+          <div class="size-left">
+            <span class="radio"></span>
+            <div class="size-text">
+              <span class="size-label">200 ml</span>
+              <span class="size-price">129,00&nbsp;€</span>
+            </div>
+          </div>
+          <div class="stock"><span class="stock-dot"></span>Auf Lager</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="wishlist-btn" aria-label="Zur Wunschliste hinzufügen">&#9825;</button>
+      <button class="add-to-cart-btn">&#128274; In den Warenkorb</button>
+    </div>
+
+    <div class="info-list">
+      <div class="info-row">
+        <span class="icon">&#128230;</span>
+        <span>Vsl. Lieferung: <strong>28. August bis 29. August</strong></span>
+      </div>
+      <div class="info-row">
+        <span class="icon">&#128666;</span>
+        <span>Kostenloser Versand: <strong>Versandkostenfrei</strong></span>
+      </div>
+      <div class="info-row">
+        <span class="icon">&#8635;</span>
+        <span>Kostenloser Rückversand: <strong>120 Tage Rückgaberecht</strong></span>
+      </div>
+      <div class="info-row">
+        <span class="icon">&#8364;</span>
+        <span>Zahlarten: <strong>Rechnungskauf, Klarna, PayPal, Kreditkarte, Apple Pay, Google Pay</strong></span>
+      </div>
+    </div>
+
+    <div class="samples-banner">
+      Bis zu 2 GRATISPROBEN zu jedem Paket
+    </div>
+
+    <div class="highlights">
+      <div class="section-header">
+        <h3>Highlights</h3>
+        <span class="chevron">&#9650;</span>
+      </div>
+      <div class="highlight-list">
+        <div class="highlight-item"><span class="icon">&#127800;</span><span><strong>Duftrichtung:</strong> frisch</span></div>
+        <div class="highlight-item"><span class="icon">&#9757;</span><span><strong>Charakter:</strong> sinnlich, belebend, maskulin</span></div>
+        <div class="highlight-item"><span class="icon">&#127807;</span><span><strong>Kopfnoten:</strong> Zitrus, Bergamotte</span></div>
+        <div class="highlight-item"><span class="icon">&#127807;</span><span><strong>Herznoten:</strong> Muskatellersalbei, Rosmarin</span></div>
+        <div class="highlight-item"><span class="icon">&#127807;</span><span><strong>Basisnoten:</strong> Vetiver, Patchouli</span></div>
+      </div>
+    </div>
+
+    <div class="accordion-section">
+      <div class="section-header">
+        <h3>Produktdetails</h3>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+
+    <div class="accordion-section">
+      <div class="section-header">
+        <h3>Inhaltsstoffe</h3>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+
+    <div class="accordion-section">
+      <div class="section-header">
+        <h3>Anwendung</h3>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+
+    <div class="accordion-section">
+      <div class="section-header">
+        <h3>Hersteller und Sicherheit</h3>
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+
+    <div class="legal-link">
+      <span>&#9873;</span> Rechtliche Bedenken melden
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
